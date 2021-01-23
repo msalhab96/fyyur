@@ -24,7 +24,7 @@ db = SQLAlchemy(app)
 # TODO: connect to a local postgresql database
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://rootuser:rootuser@localhost:5432/fyyurdb'
-
+# migrate = Migrate()
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
@@ -60,6 +60,7 @@ class Artist(db.Model):
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
 class Show(db.Model):
+  __tablename__ = "Show"
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   time = db.Column(db.DateTime, nullable=False)
   artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
@@ -67,7 +68,7 @@ class Show(db.Model):
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
-
+db.create_all()
 def format_datetime(value, format='medium'):
   date = dateutil.parser.parse(value)
   if format == 'full':
@@ -92,34 +93,11 @@ def index():
 
 @app.route('/venues')
 def venues():
-  # TODO: replace with real venues data.
-  #       num_shows should be aggregated based on number of upcoming shows per venue.
-  data=[{
-    "city": "San Francisco",
-    "state": "CA",
-    "venues": [{
-      "id": 1,
-      "name": "The Musical Hop",
-      "num_upcoming_shows": 0,
-    }, {
-      "id": 3,
-      "name": "Park Square Live Music & Coffee",
-      "num_upcoming_shows": 1,
-    }]
-  }, {
-    "city": "New York",
-    "state": "NY",
-    "venues": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }]
-  all_cities = [item.cities for item in db.session.query(Venue.city.distinct().label("city"))]
+  all_cities = [item.city for item in db.session.query(Venue.city.distinct().label("city"))]
   data = [] 
   for city in all_cities:
+    temp = [] 
     for venue in Venue.query.filter_by(city=city):
-      temp = [] 
       state = venue.state
       id = venue.id
       name = venue.name
