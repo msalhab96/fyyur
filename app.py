@@ -167,8 +167,8 @@ def create_venue_submission():
   state = request.form.get("state", "")
   address = request.form.get("address", "")
   phone = request.form.get("phone", "")
-  genres = request.form.get("genres")
-  facebook_link = request.form.get("facebook_link")
+  genres = request.form.get("genres", "")
+  facebook_link = request.form.get("facebook_link", "")
   venue = Venue(
             name =  name,
             city =  city,
@@ -362,7 +362,7 @@ def create_artist_submission():
   state = request.form.get("state", "")
   address = request.form.get("address", "")
   phone = request.form.get("phone", "")
-  genres = request.form.get("genres")
+  genres = request.form.get("genres", "")
   facebook_link = request.form.get("facebook_link", "")
   artist = Artist(
             name =  name,
