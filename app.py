@@ -197,8 +197,6 @@ def create_venue_submission():
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
-  # TODO: Complete this endpoint for taking a venue_id, and using
-  # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
   try:
     Venue.query.filter_by(id=venue_id).delete()
     db.session.commit()
@@ -206,9 +204,6 @@ def delete_venue(venue_id):
     db.session.rollback()
   finally:
     db.session.close()
-    
-  # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
-  # clicking that button delete it from the db then redirect the user to the homepage
   return redirect(url_for("venues"))
 
 #  Artists
@@ -290,13 +285,10 @@ def edit_artist(artist_id):
     artist['genres'] = artist['genres'].split(',')
   except:
     pass
-  # TODO: populate form with fields from artist with ID <artist_id>
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-  # TODO: take values from the form submitted, and update existing
-  # artist record with ID <artist_id> using the new attributes
   targeted_artist = Artist.query.filter_by(id=artist_id).first()
   targeted_artist.name = request.form.get("name", targeted_artist.name)
   targeted_artist.genres = request.form.get("genres", targeted_artist.genres)
@@ -330,14 +322,10 @@ def edit_venue(venue_id):
     venue['genres'] = venue['genres'].split(',')
   except:
     pass
-
-  # TODO: populate form with values from venue with ID <venue_id>
   return render_template('forms/edit_venue.html', form=form, venue=venue)
 
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
 def edit_venue_submission(venue_id):
-  # TODO: take values from the form submitted, and update existing
-  # venue record with ID <venue_id> using the new attributes
   targeted_venue = Venue.query.filter_by(id=venue_id).first()
   targeted_venue.name = request.form.get("name", targeted_venue.name)
   targeted_venue.genres = request.form.get("genres", targeted_venue.genres)
@@ -359,9 +347,6 @@ def create_artist_form():
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
-  # called upon submitting the new artist listing form
-  # TODO: insert form data as a new Venue record in the db, instead
-  # TODO: modify data to be the data object returned from db insertion
   name = request.form.get("name", "")
   city = request.form.get("city", "")
   state = request.form.get("state", "")
@@ -383,10 +368,6 @@ def create_artist_submission():
     flash('Artist ' + request.form['name'] + ' was successfully listed!')
   except:
     flash('An error occurred. Artist ' + request.form['name'] + ' could not be listed.')
-  # on successful db insert, flash success
-  
-  # TODO: on unsuccessful db insert, flash an error instead.
-  # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
   return render_template('pages/home.html')
 
 
@@ -395,9 +376,6 @@ def create_artist_submission():
 
 @app.route('/shows')
 def shows():
-  # displays list of shows at /shows
-  # TODO: replace with real venues data.
-  #       num_shows should be aggregated based on number of upcoming shows per venue.
   all_shows = Show.query.all()
   data = [{"venue_id": item.id, 
            "venue_name": Venue.query.filter_by(id=item.venue_id).first().name,
@@ -410,18 +388,14 @@ def shows():
 
 @app.route('/shows/create')
 def create_shows():
-  # renders form. do not touch.
   form = ShowForm()
   return render_template('forms/new_show.html', form=form)
 
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
-  # called to create new shows in the db, upon submitting new show listing form
-  # TODO: insert form data as a new Show record in the db, instead
   artist_id = request.form.get("artist_id", "")
   venue_id = request.form.get("venue_id", "")
   time = request.form.get("start_time", "")
-  # on successful db insert, flash success
   try:
     show = Show(artist_id=artist_id, venue_id=venue_id, time=time)
     db.session.add(show)
