@@ -22,4 +22,21 @@
 		<img id="front-splash" src="{{ url_for('static',filename='img/front-splash.jpg') }}" alt="Front Photo of Musical Band" />
 	</div>
 </div>
+
+<div>
+	<h1> Latest Venues </h1>
+	{% for venue in latest_venues %}
+		<h3 style="color:rgb(255, 139, 56)"> {{ venue.name }} </h4>
+		
+		<h6 style="padding-left:20px;"> {{ venue.city }}, {{venue.state}}</h6>
+	{% endfor %}
+</div>
+
+<div>
+	<h1> Latest Artists </h1>
+	{% for artist in latest_artist %}
+		<a href="/artists/{{artist.id}}"><h4> {{ artist.name }} </h4></a>
+	{% endfor %}
+</div>
+
 {% endblock %}
