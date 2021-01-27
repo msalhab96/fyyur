@@ -14,7 +14,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 from datetime import datetime
-
+import config
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -26,7 +26,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 from models import *
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://rootuser:rootuser@localhost:5432/fyyurdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 db.create_all()
 #----------------------------------------------------------------------------#
 # Filters.
