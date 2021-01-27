@@ -86,10 +86,8 @@ def search_venues():
 def show_venue(venue_id):
   targeted_venue = Venue.query.filter(Venue.id==venue_id).first()
   shows_in_ven = Show.query.filter(Show.venue_id==targeted_venue.id).all()
-  artists_in_venue = [] 
-  for show in shows_in_ven:
-    artists_in_venue += Artist.query.filter(Artist.id==show.artist_id).all()
-
+  artists_in_venue = Artist.query.join(Show, Artist.id==Show.artist_id).all()
+  print(artists_in_venue)
   past_shows = [{"artist_id": item.artist_id,
                  "artist_name": Artist.query.filter_by(id=item.artist_id).first().name,
                  "artist_image_link": Artist.query.filter_by(id=item.artist_id).first().image_link,
