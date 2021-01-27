@@ -68,8 +68,8 @@ def venues():
       state = venue.state
       id = venue.id
       name = venue.name
-      num_upcoming_shows = Show.query.filter_by(venue_id=id).count()
-      temp.append({"id": id, "name": name, "num_upcoming_shows":num_upcoming_shows})
+      num_upcoming_shows = [1 for item in Show.query.filter_by(venue_id=id).all() if item.time > datetime.now()]
+      temp.append({"id": id, "name": name, "num_upcoming_shows": sum(num_upcoming_shows)})
     data.append({"city": city, "state": state, "venues": temp})
   return render_template('pages/venues.html', areas=data)
 
@@ -87,7 +87,6 @@ def show_venue(venue_id):
   targeted_venue = Venue.query.filter(Venue.id==venue_id).first()
   shows_in_ven = Show.query.filter(Show.venue_id==targeted_venue.id).all()
   artists_in_venue = Artist.query.join(Show, Artist.id==Show.artist_id).all()
-  print(artists_in_venue)
   past_shows = [{"artist_id": item.artist_id,
                  "artist_name": Artist.query.filter_by(id=item.artist_id).first().name,
                  "artist_image_link": Artist.query.filter_by(id=item.artist_id).first().image_link,
