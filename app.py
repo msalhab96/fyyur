@@ -27,7 +27,7 @@ migrate = Migrate(app, db)
 from models import *
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://rootuser:rootuser@localhost:5432/fyyurdb'
-
+db.create_all()
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
@@ -117,7 +117,6 @@ def show_venue(venue_id):
     "upcoming_shows": upcoming_shows,
     "past_shows_count": len(past_shows),
     "upcoming_shows_count": len(upcoming_shows),
-    
   }
   return render_template('pages/show_venue.html', venue=data)
 
